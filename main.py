@@ -6,8 +6,8 @@ for acc in acc_data:
     print(acc)
 
 # データベースに1件追加
-# user={"acc_date":12,"amount": 110,"item_code":3}
-# dao.insert_one(user)
+user={"acc_date":1202,"amount": 20000,"item_code":4}
+dao.insert_one(user)
 
-# user={"item_code":3,"item_name": '光熱費'}
+# user={"item_code":4,"item_name": '税金'}
 # test.insert_two(user)
