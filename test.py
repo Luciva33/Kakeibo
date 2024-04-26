@@ -5,7 +5,7 @@ def connect():
         host="localhost",
         user="root",
         # password="root",
-        database="kakeibo",
+        database="kakei",
         cursorclass=pymysql.cursors.DictCursor,
     )
     return connection

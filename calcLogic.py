@@ -22,6 +22,6 @@ import tkinter as tk,dao,test
 
 # root.mainloop()
 
-def create_sql():
+# def create_sql():
     #日付を読み取る
-    acc_data=dateEntry
+    # acc_data=dateEntry

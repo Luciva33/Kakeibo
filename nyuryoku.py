@@ -1,5 +1,6 @@
 import tkinter as tk
 import pymysql
+import dao
 
 
 def connect():
@@ -7,7 +8,7 @@ def connect():
         host="localhost",
         user="root",
         # password="root",
-        database="kakeibo",
+        database="kakei",
         cursorclass=pymysql.cursors.DictCursor,
     )
     return connection
@@ -18,72 +19,73 @@ conn = pymysql.connect(
         user="root",
         charset='utf8mb4',
         # password="root",
-        # database="kakei",
+        database="kakei",
         cursorclass=pymysql.cursors.DictCursor,
 )
 cursor = conn.cursor()
 cursor.execute("CREATE DATABASE IF NOT EXISTS kakei")
+cursor.execute("SHOW DATABASES ")
 cursor.close()
 conn.close()
+for x in cursor:
+    print(x)
 
-with connect() as con:
-   with con.cursor() as cursor:
-        try:
-            #itemuテーブルの定義
-            ddl="""
-            CREATE TABLE item
-            (
-            item_code INTEGER PRIMARY KEY AUTOINCREMENT,
-            item_name TEXT NOT NULL UNIQUE
-            );
-            """
-            #SQLの発行
-            conn.execute(ddl)
-            # acc_dataテーブルの定義    
-            ddl = """
-            CREATE TABLE acc_data
-            ( 
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                acc_date DATE NOT NULL,
-                item_code INTEGER NOT NULL,
-                amount INTEGER,
-                FOREIGN KEY(item_code) REFERENCES item(item_code)
-            );
-            """
-            conn.execute(ddl)
-            conn.execute("INSERT INTO item(item_name) VALUES('食費');")
-            conn.execute("INSERT INTO item(item_name) VALUES('住宅費');")
-            conn.execute("INSERT INTO item(item_name) VALUES('光熱費');")
-        except:
-            pass    
+# with connect() as con:
+#    with con.cursor() as cursor:
+#         try:
+#             #itemuテーブルの定義
+#             ddl="""
+#             CREATE TABLE item
+#             (
+#             item_code INTEGER PRIMARY KEY AUTOINCREMENT,
+#             item_name TEXT NOT NULL UNIQUE
+#             );
+#             """
+#             #SQLの発行
+#             cursor.execute(ddl)
+#             # acc_dataテーブルの定義    
+#             ddl = """
+#             CREATE TABLE acc_data
+#             ( 
+#                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+#                 acc_date DATE NOT NULL,
+#                 item_code INTEGER NOT NULL,
+#                 amount INTEGER,
+#                 FOREIGN KEY(item_code) REFERENCES item(item_code)
+#             );
+#             """
+#             cursor.execute(ddl)
+#             cursor.execute("INSERT INTO item(item_name) VALUES('食費');")
+#             cursor.execute("INSERT INTO item(item_name) VALUES('住宅費');")
+#             cursor.execute("INSERT INTO item(item_name) VALUES('光熱費');")
+#         except:
+#             pass    
 
 
 def create_sql():
     
     #日付を読み取る
-    acc_data=dateEntry.get()
+    acc_date=dateEntry.get()
     #内訳を読み取る
     item_code=itemsEntry.get()
     #金額を読み取る
     amount=amountEntry.get()
+    user={"acc_date":acc_date,"item_code":item_code,"amount":amount,}
     #SQLを作成して出力
     # print("""
     # INSERT INTO acc_data(acc_date,item_code_,amount)
     # VALUES('{}',{},{});
-    # """.format(acc_data,item_code,amount))
+    # """.format(acc_date,item_code,amount))
 
     #SQLを発行してDBへ登録
     with connect() as con:
         with con.cursor() as cursor:
-        
-            con.execute("""
-            INSERT INTO acc_data(acc_date,amount,item_code)
-            VALUES('{}',{},{});            
-            """ .format(acc_data,amount,item_code))
-            print("1件登録しました")
-        #ドメインエラーなどにより登録できなかった場合のエラー処理    
-        
-            print("エラー!登録できませんでした")
+            try:    
+                dao.insert_one(user)            
+                print("1件登録しました")
+                #ドメインエラーなどにより登録できなかった場合のエラー処理    
+            except:
+                print("エラー!登録できませんでした")
 
 
 root = tk.Tk()
