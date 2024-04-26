@@ -1,12 +1,14 @@
 import pymysql
 
+
+
 # データベースに接続
 def connect():
     connection = pymysql.connect(
         host="localhost",
         user="root",
         # password="root",
-        database="kakei",
+        database="kakeibo",
         cursorclass=pymysql.cursors.DictCursor,
     )
     return connection
@@ -23,6 +25,18 @@ def find_all():
 
     return result
 
+def find_all2():
+    result = None
+    with connect() as con:
+        with con.cursor() as cursor:
+            sql = "SELECT * FROM item"
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            
+
+    return result
+
+
 # acc_dataテーブルにデータ１件追加
 def insert_one(user):
     with connect() as con:
@@ -30,10 +44,43 @@ def insert_one(user):
             sql = "INSERT INTO acc_data(acc_date,item_code,amount) VALUES(%s,%s,%s)"
             cursor.execute(sql,(user["acc_date"],user["item_code"],user["amount"]))
         con.commit()
+    print(find_all())
 
 
-#c.execute("""1111
-#    INSERT INTO acc_data(acc_date.decode("utf-8"),item_code,amount)
-#    VALUES({},{},{});""".format(date,code,amount)
-#   )
 
+def cerate_table():
+    with connect() as con:
+        with con.cursor() as cursor:
+            try:
+                #itemuテーブルの定義
+                ddl="""
+                CREATE TABLE item
+                (
+                item_code INT PRIMARY KEY AUTO_INCREMENT,
+                item_name TEXT NOT NULL UNIQUE
+                );
+                """
+               
+                #SQLの発行
+                cursor.execute(ddl)
+                 
+                # acc_dataテーブルの定義    
+                ddl = """
+                CREATE TABLE acc_data
+                ( 
+                    id INT PRIMARY KEY AUTO_INCREMENT,
+                    acc_date DATE NOT NULL,
+                    item_code INT NOT NULL,
+                    amount INT,
+                    FOREIGN KEY(item_code) REFERENCES item(item_code)
+                );
+                """
+                cursor.execute(ddl)
+                cursor.execute("INSERT INTO item(item_name) VALUES('食費');")
+                cursor.execute("INSERT INTO item(item_name) VALUES('住宅費');")
+                cursor.execute("INSERT INTO item(item_name) VALUES('光熱費');")
+                con.commit()  
+            except:
+                print('エラーもしくはテーブル作成済み')
+                pass   
+     

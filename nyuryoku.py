@@ -3,65 +3,6 @@ import pymysql
 import dao
 
 
-def connect():
-    connection = pymysql.connect(
-        host="localhost",
-        user="root",
-        # password="root",
-        database="kakei",
-        cursorclass=pymysql.cursors.DictCursor,
-    )
-    return connection
-
-
-conn = pymysql.connect(
-        host="localhost",
-        user="root",
-        charset='utf8mb4',
-        # password="root",
-        database="kakei",
-        cursorclass=pymysql.cursors.DictCursor,
-)
-cursor = conn.cursor()
-cursor.execute("CREATE DATABASE IF NOT EXISTS kakei")
-cursor.execute("SHOW DATABASES ")
-cursor.close()
-conn.close()
-for x in cursor:
-    print(x)
-
-# with connect() as con:
-#    with con.cursor() as cursor:
-#         try:
-#             #itemuテーブルの定義
-#             ddl="""
-#             CREATE TABLE item
-#             (
-#             item_code INTEGER PRIMARY KEY AUTOINCREMENT,
-#             item_name TEXT NOT NULL UNIQUE
-#             );
-#             """
-#             #SQLの発行
-#             cursor.execute(ddl)
-#             # acc_dataテーブルの定義    
-#             ddl = """
-#             CREATE TABLE acc_data
-#             ( 
-#                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-#                 acc_date DATE NOT NULL,
-#                 item_code INTEGER NOT NULL,
-#                 amount INTEGER,
-#                 FOREIGN KEY(item_code) REFERENCES item(item_code)
-#             );
-#             """
-#             cursor.execute(ddl)
-#             cursor.execute("INSERT INTO item(item_name) VALUES('食費');")
-#             cursor.execute("INSERT INTO item(item_name) VALUES('住宅費');")
-#             cursor.execute("INSERT INTO item(item_name) VALUES('光熱費');")
-#         except:
-#             pass    
-
-
 def create_sql():
     
     #日付を読み取る
@@ -71,14 +12,9 @@ def create_sql():
     #金額を読み取る
     amount=amountEntry.get()
     user={"acc_date":acc_date,"item_code":item_code,"amount":amount,}
-    #SQLを作成して出力
-    # print("""
-    # INSERT INTO acc_data(acc_date,item_code_,amount)
-    # VALUES('{}',{},{});
-    # """.format(acc_date,item_code,amount))
-
+  
     #SQLを発行してDBへ登録
-    with connect() as con:
+    with dao.connect() as con:
         with con.cursor() as cursor:
             try:    
                 dao.insert_one(user)            
@@ -146,13 +82,31 @@ regbtn=tk.Button(root,text="登録",font=("",16),width=10,bg="blue2",command=cre
 regbtn.pack()
 
 
-
 # root2=tk.Tk()
 # root2.title("電卓")
 # root2.geometry("400x400")
 # root2.mainloop()
 
+"""
+アプリの処理
+"""
 
-#アプリの処理
+conn = pymysql.connect(
+    host="localhost",
+    user="root",
+    cursorclass=pymysql.cursors.DictCursor,
+    )
+cursor = conn.cursor()
+cursor.execute("CREATE DATABASE IF NOT EXISTS kakeibo")
+# cursor.execute("SHOW DATABASES ")
+cursor.close()
+conn.close()
+
+
+dao.cerate_table()
+print(dao.find_all())
+print(dao.find_all2())
+
+
 
 root.mainloop()

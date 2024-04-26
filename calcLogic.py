@@ -1,4 +1,5 @@
-import tkinter as tk,dao,test
+import tkinter as tk,dao,pymysql,nyuryoku
+
 
 #ボタンがクリックされた時の処理をコールバック関数として定義
 
@@ -21,7 +22,3 @@ import tkinter as tk,dao,test
 # button.pack()
 
 # root.mainloop()
-
-# def create_sql():
-    #日付を読み取る
-    # acc_data=dateEntry
