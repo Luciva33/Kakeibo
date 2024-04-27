@@ -46,6 +46,18 @@ def insert_one(user):
         con.commit()
     print(find_all())
 
+# def cerate_database():
+#     conn = pymysql.connect(
+#         host="localhost",
+#         user="root",
+#         cursorclass=pymysql.cursors.DictCursor,
+#         )
+#     cursor = conn.cursor()
+#     cursor.execute("CREATE DATABASE IF NOT EXISTS kakeibo")
+#     # cursor.execute("SHOW DATABASES ")
+#     cursor.close()
+#     conn.close()
+
 
 
 def cerate_table():
@@ -84,3 +96,25 @@ def cerate_table():
                 print('エラーもしくはテーブル作成済み')
                 pass   
      
+# 内訳テーブル(item)にあるitem_nameのタプルを作成する
+
+def createitemname():
+    #データベースの接続
+    with connect() as con:
+        with con.cursor() as cursor:
+            li=[]
+            #SELECT文でitem_nameを取得、for文で回す
+            cursor.execute("SELECT item_name FROM item")
+            items = cursor.fetchall()
+            for r in items:
+                
+                item=r["item_name"]
+                li.append([item])
+            #リスト型のliタプル型に変換、ファンクションに戻す
+            
+            # print(li,type(li))
+            # print(len(li)) 
+        return tuple(li)
+    
+
+

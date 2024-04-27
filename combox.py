@@ -34,19 +34,21 @@ def createitemname():
             cursor.execute("SELECT item_name FROM item")
             items = cursor.fetchall()
             for r in items:
-                li.append([r])
+                
+                item=r["item_name"]
+                li.append([item])
             #リスト型のliタプル型に変換、ファンクションに戻す
-            print(r)
-            print(li)
-        return(li) #タプルになってるか？
+            
+            print(li,type(li))
+            # print(len(li)) 
+        return tuple(li)
     
 
-#ボタンが押された時のコールバック関数
+# #ボタンが押された時のコールバック関数
 
 
 def getitemcode(item_name):
     
-   
     with dao.connect() as con:
         with con.cursor() as cursor:
             sql=(  f"""
@@ -56,13 +58,13 @@ def getitemcode(item_name):
        
             cursor.execute(sql)
             item_code=cursor.fetchone()
+            itemcode=item_code["item_code"]
             con.commit()
 
-    #SELECT文の結果をfetchoneメソッドで１つ表示する
-    #fethoneメソッドはタプルで帰ってくるので、index0を取得し、出力する←うまくいかなかったので、Dictで返した
-  
-    print(type(tuple(item_code)))
-    print(item_code)
+#     #SELECT文の結果をfetchoneメソッドで１つ表示する
+#     #fethoneメソッドはタプルで帰ってくるので、index0を取得し、出力する←うまくいかなかったので、Dictで返した
+    
+    print(type(itemcode),itemcode)
     print(item_name)
    
     
@@ -78,6 +80,6 @@ combo.pack()
 button=tk.Button(text='表示',command=lambda:getitemcode(combo.get()))
 button.pack()
 
-createitemname()
+# createitemname()
 
 root .mainloop()

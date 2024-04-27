@@ -1,14 +1,49 @@
-import tkinter as tk
+import tkinter as tk , tkinter.ttk as ttk
 import pymysql
 import dao
 
 
-def create_sql():
+conn = pymysql.connect(
+    host="localhost",
+    user="root",
+    cursorclass=pymysql.cursors.DictCursor,
+    )
+cursor = conn.cursor()
+cursor.execute("CREATE DATABASE IF NOT EXISTS kakeibo")
+# cursor.execute("SHOW DATABASES ")
+cursor.close()
+conn.close()
+
+dao.cerate_table()
+
+
+
+def getitemcode(item_name):
+ with dao.connect() as con:
+        with con.cursor() as cursor:
+            sql=(  f"""
+                SELECT item_code FROM item
+                WHERE item_name = '{item_name}'
+                """)
+       
+            cursor.execute(sql)
+            item_code=cursor.fetchone()
+            itemcode=item_code["item_code"]
+            con.commit()
+        return itemcode
+
+
+
+
+
+def create_sql(item_name):
     
+   
+
     #日付を読み取る
     acc_date=dateEntry.get()
     #内訳を読み取る
-    item_code=itemsEntry.get()
+    item_code=getitemcode(item_name)
     #金額を読み取る
     amount=amountEntry.get()
     user={"acc_date":acc_date,"item_code":item_code,"amount":amount,}
@@ -48,8 +83,8 @@ btn4.pack(anchor="ne",side="right" )
 
 #入力画面ラベル
 
-label1=tk.Label(root,text="[入力画面]",font=14,bg="green1")
-label1.pack()
+label1=tk.Label(root,text="[入力画面]",font=("",14),height=2,bg="green1")
+label1.pack(fill="x")
 
 #日付のラベルとエントリー
 
@@ -65,8 +100,14 @@ itemsFrame=tk.Frame(root,pady=10)
 itemsFrame.pack()
 itemsLabel=tk.Label(itemsFrame,font=("",14),text="内訳")
 itemsLabel.pack(side="left")
-itemsEntry=tk.Entry(itemsFrame,font=("",14),justify="center",width=15)
-itemsEntry.pack(side="left")
+# itemsEntry=tk.Entry(itemsFrame,font=("",14),justify="center",width=15)
+# itemsEntry.pack(side="left")
+
+# 内訳コンボボックスの作成
+combo = ttk.Combobox(itemsFrame, state='readonly',font=("",14),width=13)
+combo["values"] = dao.createitemname()
+combo.current(0)
+combo.pack()
 
 #金額
 amountFrame=tk.Frame(root,pady=10)
@@ -78,9 +119,8 @@ amountEntry.pack(side="left")
 
 #登録ボタンの設定
 
-regbtn=tk.Button(root,text="登録",font=("",16),width=10,bg="blue2",command=create_sql)
+regbtn=tk.Button(root,text="登録",font=("",16),width=10,bg="blue2",command=lambda:create_sql(combo.get()))
 regbtn.pack()
-
 
 # root2=tk.Tk()
 # root2.title("電卓")
@@ -91,21 +131,11 @@ regbtn.pack()
 アプリの処理
 """
 
-conn = pymysql.connect(
-    host="localhost",
-    user="root",
-    cursorclass=pymysql.cursors.DictCursor,
-    )
-cursor = conn.cursor()
-cursor.execute("CREATE DATABASE IF NOT EXISTS kakeibo")
-# cursor.execute("SHOW DATABASES ")
-cursor.close()
-conn.close()
 
 
-dao.cerate_table()
-print(dao.find_all())
-print(dao.find_all2())
+
+# print(dao.find_all())
+# print(dao.find_all2())
 
 
 
