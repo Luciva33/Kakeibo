@@ -44,7 +44,7 @@ def insert_one(user):
             sql = "INSERT INTO acc_data(acc_date,item_code,amount) VALUES(%s,%s,%s)"
             cursor.execute(sql,(user["acc_date"],user["item_code"],user["amount"]))
         con.commit()
-    print(find_all())
+    # print(find_all())
 
 # def cerate_database():
 #     conn = pymysql.connect(
