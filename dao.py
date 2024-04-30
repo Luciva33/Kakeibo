@@ -107,14 +107,14 @@ def createitemname():
             cursor.execute("SELECT item_name FROM item")
             items = cursor.fetchall()
             for r in items:
-                
                 item=r["item_name"]
                 li.append([item])
-            #リスト型のliタプル型に変換、ファンクションに戻す
+                
             
             # print(li,type(li))
             # print(len(li)) 
         return tuple(li)
+            #リスト型のliタプル型に変換、ファンクションに戻す
     
 
 
