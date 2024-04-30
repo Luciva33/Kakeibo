@@ -90,7 +90,11 @@ def cerate_table():
                 cursor.execute(ddl)
                 cursor.execute("INSERT INTO item(item_name) VALUES('食費');")
                 cursor.execute("INSERT INTO item(item_name) VALUES('住宅費');")
-                cursor.execute("INSERT INTO item(item_name) VALUES('光熱費');")
+                cursor.execute("INSERT INTO item(item_name) VALUES('水道光熱費');")
+                cursor.execute("INSERT INTO item(item_name) VALUES('税金');")
+                cursor.execute("INSERT INTO item(item_name) VALUES('学費');")
+                cursor.execute("INSERT INTO item(item_name) VALUES('交通費');")
+                cursor.execute("INSERT INTO item(item_name) VALUES('その他');")
                 con.commit()  
             except:
                 print('エラーもしくはテーブル作成済み')

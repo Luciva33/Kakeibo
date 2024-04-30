@@ -65,5 +65,43 @@ with dao.connect() as con:
                 i+=1
 #ツリービューの配置
 
+"""
+TreeViewのアイテムをすべて削除するにはdleteメソッドを使う
+deleteメソッドには、削除するアイテムを指定する
+指定にはitemを指定 全てのitemを指定するには、
+tree.get _childern()を使う
+tree.get_childern()はリストでかえってくるため、
+for文ですべてのitemを削除する
+
+for i in tree.get_children()
+    tree.delete(i)
+
+    
+#また、結合(starred expression)の
+#機能を用いて、シンプルに記述することができる。
+
+tree.delete(*tree.get_children())    
+
+ただし、開始日と終了日が空欄だった場合エラーになるので、
+デフォルト値を指定する必要がある。
+
+"""
+
+if start == "":
+    start = "1900/01/01"
+if end == "":
+    end = "2100/01/01"
+
+sql = """
+SELECT acc_date,item_name,amount
+FROM acc_data as a,item as i
+WHERE a.item_code = i.item_code AND
+acc_date BETWEEN '{}' AND '{}'
+ORDER BY acc_date
+""".format(start,end)
+
+
+
+
 tree.pack()
 root.mainloop()
