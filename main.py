@@ -78,8 +78,9 @@ def create_gui():
     btn2.pack(anchor="nw",side="left" )
     btn3=tk.Button(menuFrame,text="終了",fg="black",height=2,width=5,command=quit_button)
     btn3.pack(anchor="ne",side="right")
-    btn4=tk.Button(menuFrame,text="電卓",fg="yellow3",height=2,width=5)
-    btn4.pack(anchor="ne",side="right" )
+    #電卓機能はまだ未実装
+    # btn4=tk.Button(menuFrame,text="電卓",fg="yellow3",height=2,width=5)
+    # btn4.pack(anchor="ne",side="right" )
 
     #入力画面ラベル
     label1=tk.Label(root,text="[入力画面]",font=("",14),height=2,bg="green1")
@@ -182,8 +183,9 @@ def select_gui():
     btn2.pack(anchor="nw",side="left" )
     btn3=tk.Button(hyouziframe,text="終了",fg="black",height=2,width=5,command=quit_button)
     btn3.pack(anchor="ne",side="right")
-    btn4=tk.Button(hyouziframe,text="電卓",fg="yellow3",height=2,width=5)
-    btn4.pack(anchor="ne",side="right" )
+    #電卓機能はまだ未実装
+    # btn4=tk.Button(hyouziframe,text="電卓",fg="yellow3",height=2,width=5)
+    # btn4.pack(anchor="ne",side="right" )
 
     #入力画面ラベルの設定
     hyouziLabel=tk.Label(root,text="【表示画面】",font=("",16),height=2)
@@ -253,7 +255,5 @@ def select_gui():
 
     tree.pack(fill="x",padx=20,pady=20)
     root.mainloop()
-
-
 
 create_gui()

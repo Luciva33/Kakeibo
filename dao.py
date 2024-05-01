@@ -1,7 +1,5 @@
 import pymysql
 
-
-
 # データベースに接続
 def connect():
     connection = pymysql.connect(
@@ -33,7 +31,6 @@ def find_all2():
             cursor.execute(sql)
             result = cursor.fetchall()
             
-
     return result
 
 
@@ -44,21 +41,6 @@ def insert_one(user):
             sql = "INSERT INTO acc_data(acc_date,item_code,amount) VALUES(%s,%s,%s)"
             cursor.execute(sql,(user["acc_date"],user["item_code"],user["amount"]))
         con.commit()
-    # print(find_all())
-
-# def cerate_database():
-#     conn = pymysql.connect(
-#         host="localhost",
-#         user="root",
-#         cursorclass=pymysql.cursors.DictCursor,
-#         )
-#     cursor = conn.cursor()
-#     cursor.execute("CREATE DATABASE IF NOT EXISTS kakeibo")
-#     # cursor.execute("SHOW DATABASES ")
-#     cursor.close()
-#     conn.close()
-
-
 
 def cerate_table():
     with connect() as con:
@@ -114,9 +96,6 @@ def createitemname():
                 item=r["item_name"]
                 li.append([item])
                 
-            
-            # print(li,type(li))
-            # print(len(li)) 
         return tuple(li)
             #リスト型のliタプル型に変換、ファンクションに戻す
     

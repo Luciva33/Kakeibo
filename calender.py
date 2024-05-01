@@ -19,12 +19,14 @@ class mycalender(tk.Frame):
         frame_top=tk.Frame(self)
         frame_top.pack(pady=5)
         self.previous_month=tk.Label(frame_top,text="<",font=("",14))
+        self.previous_month.bind("<1>",self.change_month)
         self.previous_month.pack(side="left",padx=10)
         self.current_year=tk.Label(frame_top,text=self.year,font=("",18))
         self.current_year.pack(side="left")
         self.current_month=tk.Label(frame_top,text=self.month,font=("",18))
         self.current_month.pack(side="left")
         self.next_month=tk.Label(frame_top,text=">",font=("",14))
+        self.next_month.bind("<1>",self.change_month)
         self.next_month.pack(side="left",padx=10)
 
         #frame_week部分の作成
@@ -55,6 +57,11 @@ class mycalender(tk.Frame):
     def create_calender(self,year,month):
         #指定した年、月のカレンダーウィジェットを作成する
         #calenderモジュールのインスタンスを作成
+        try:
+            for key,item in self.day.items():
+                item.destroy()
+        except:
+            pass
         import calendar
         cal = calendar.Calendar()
         #指定した年月のカレンダーをリストで返す
@@ -75,6 +82,23 @@ class mycalender(tk.Frame):
                 #月によっては、i=41まで日付がないため日付がないiのエラー回避が必要
                 break
 
+    def change_month(self,event):
+    #押されたラベルを判定し、月の計算
+        if event.widget["text"]=="<":
+            self.month -=1
+        else:
+            self.month +=1
+        #月が0,13になった時の処理
+        if self.month ==0:
+            self.year -=1
+            self.month =12
+        elif self.month ==13:
+            self.year +=1
+            self.month=1
+        self.current_year["text"]=self.year
+        self.current_month["text"]=self.month
+        self.create_calender(self.year,self.month)
+
 #デフォルトボタンクラス
 class d_button(tk.Button):
     def __init__(self, master=None,cnf={}, **kw):
@@ -83,7 +107,7 @@ class d_button(tk.Button):
 
 
 root=tk.Tk()
-root.title("Calender App")
+root.title("Calender")
 mycal=mycalender(root)
 mycal.pack()
 root.mainloop()
